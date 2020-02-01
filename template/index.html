@@ -1,0 +1,3352 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>TWG Forecast Generator</title>
+<meta content="width=device-width, initial-scale=1" name="viewport">
+
+<link href="../static/ankits-stupendous-project.webflow.2fa19551b.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../static/css" media="all">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,regular%7CRoboto+Condensed:regular" media="all">
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,regular%7CRoboto+Condensed:regular" media="all">
+
+
+<link rel="stylesheet" href="../static/tail.select-master/css/default/tail.select-light.css" type="text/css">
+<script src="../static/tail.select-master/js/tail.select.js"></script>
+
+
+<link href="../static/styles/multiselect.css" rel="stylesheet" type="text/css">
+<script src="../static/multiselect.min.js"></script>
+
+
+<script src="../static/Chart.bundle.js"></script>
+<script type="text/javascript">
+WebFont.load({  google: {    families: ["Roboto:300,regular","Roboto Condensed:regular"]  }});
+</script>
+
+<!--<script type="text/javascript">
+!function(o,c){var n=c.documentElement,t=" w-mod-";
+n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);
+</script>-->
+
+</head>
+
+
+
+
+<body class="body" onload="populateBrand();populateSize();populateVarietal();populateMaster();multi();">
+	<div class="navbar">
+		<div class="w-container">
+			<div class="w-row">
+				<a href="index.html" class="w-inline-block w--current">
+				<img src="../static/5d422ad641794c79f64e8610_twg-nav.png" width="217" srcset="https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-500.png 500w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-800.png 800w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-1080.png 1080w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-1600.png 1600w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-2000.png 2000w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav.png 2418w" sizes="(max-width: 479px) 45vw, 217px" alt="" class="logo image">
+				</a>	
+			</div>
+		</div>
+	</div>
+
+	<div class="section hero">
+		<div class="container w-container">
+		</div>
+	</div>
+	<div data-anchor="slide1" class="section grey">
+		<div class="w-container">
+			<h2 class="grey-heading">Generate Forecast Report.</h2>
+			<p class="paragraph">Get detailed forecast report in an excel file</p>
+		</div>
+		<div class="w-container">
+			<div class="w-form">
+				<form id="forecastgenerator" name="forecastgenerator" data-name="forecastgenerator" action = "" method = "POST" enctype = "multipart/form-data">
+					<div class="w-layout-grid grid-2" id="generatordiv">
+					<label for="InputMethod" class="field-label-3">Input Method :</label>
+					<label for="Model" class="field-label-3">Model :</label>
+					<label for="AggregateBy" class="field-label-3">Aggregate By :</label>
+
+					<select id="InputMethod" name="InputMethod" onchange="if (this.selectedIndex) inputMethod();" data-name="Input Method" required class="w-node-9ee07fd66c81-67620711 w-select">
+						<option value="sql" id="sql">SQL</option>
+						<option value="csv" id="csv">CSV</option>
+					</select>
+					
+					<select id="Model" name="Model" data-name="Model" required class="w-node-2631e6409bbc-67620711 w-select">
+						<option value="bestfit">Best fit</option>
+						<option value="prophet">Prophet</option>
+						<option value="arima">ARIMA</option>
+						<option value="ets">ETS</option>
+					</select>
+
+					<select id="AggregateBy" name="AggregateBy" data-name="AggregateBy" class="w-node-248ebf42ec8e-67620711 w-select">
+						<option value="mastercode">Mastercode</option>
+						<option value="brand">Brand</option>
+						<option value="size">Size</option>
+						<option value="varietal">Varietal</option>
+						<option value="brandsize">Brand+Size</option>
+					</select>
+
+					<label for="startdate" class="field-label-2">Start Date :</label>
+					<label for="enddate" class="field-label-2">End Date :</label>
+					<label for="period" class="field-label-2">Forecast Period :</label>
+					
+					<input type="month" name="startdate" data-name="startdate" id="startdate" value="2015-01" min="2014-01" max="2019-01-01" class="text-field-2 w-input">
+					<input type="month" name="enddate" data-name="enddate" id="enddate"  value="2019-07" min="2019-01" class="text-field-3 w-input">
+					<input type="number" value="6" min="1" max="48" name="period" data-name="period"  id="period" class="text-field-4 w-input">
+					
+					<input type="submit" name="action" value="Generate" data-wait="Please wait..." id="w-node-d898442cb85a-67620711" class="w-button">
+					</div>
+				</form>
+				<div class="w-form-done">
+					<div>Thank you! Your submission has been received!</div>
+				</div>
+				
+				<div class="w-form-fail">
+					<div>Oops! Something went wrong while submitting the form.</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<div class="social-section">
+	</div>
+
+
+	<div class="section">
+		<div class="w-container">
+			<h2 class="grey-heading">Forecast Viewer</h2>
+			<div class="text-block">View by:</div>
+		</div>
+		<div class="w-container">
+			<div class="w-form">
+				<form id="forecastviewer" name="forecastviewer" data-name="forecastviewer" action = "" method = "POST" enctype = "multipart/form-data">
+					<div class="w-layout-grid grid-2">
+						<label class="field-label-3">Brand :</label>
+						<label class="field-label-3">Size</label>
+						<label class="field-label-3">Varietal</label>
+
+						<select id="brand" type="text" name="brand" data-name="brand" multiple="" class="w-node-9ee07fd66c81-67620711 w-select">
+						</select>
+
+						<select id="size" name="size" multiple="multiple" data-name="size" class="w-node-2631e6409bbc-67620711 w-select">
+						</select>
+						
+						<select id="varietal" name="varietal" multiple="multiple" data-name="varietal" class="w-node-248ebf42ec8e-67620711 w-select">
+						</select>
+						
+						
+					</div>	
+						
+						<div id="w-node-6f09d405a29e-67620711" class="text-block-2">OR</div>
+					<div class="w-layout-grid grid-2">
+						<label id="w-node-593e2a6ecf0e-67620711" class="field-label-3">Mastercode</label>
+						<select id="mastercode" name="mastercode" multiple="" data-name="mastercode" class="w-node-5b1ace043589-67620711 w-select">
+						</select>
+					</div>
+						<input type="submit" name="action" value="View" data-wait="Please wait..." id="w-node-b958774fcea7-67620711" class="w-button">
+					</div>
+				</form>
+				<div class="w-form-done">
+					<div>Thank you! Your submission has been received!</div>
+				</div>
+
+				<div class="w-form-fail">
+					<div>Oops! Something went wrong while submitting the form.</div>
+				</div>
+			</div>
+		</div>
+		<div class="w-container" id="graph">
+		
+
+		</div>	
+	</div>
+	
+	<div class="social-section">
+		<div class="w-container"></div>
+	</div>
+
+	<div class="section grey">
+		<div class="w-container">
+			<img src="../static/5d422ad641794c79f64e8610_twg-nav.png" width="190" srcset="https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-500.png 500w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-800.png 800w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-1080.png 1080w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-1600.png 1600w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav-p-2000.png 2000w, https://uploads-ssl.webflow.com/5d422aaa02c753838d62070b/5d422ad641794c79f64e8610_twg-nav.png 2418w" sizes="190px" alt="" class="logo footer">
+		</div>
+	</div>
+
+
+
+<script src="../static/canvasjs.min.js"></script>
+<script>
+function multi(){
+	tail.select("#brand", {search: true, animate: true, classNames: "default white", multiSelectAll: true});
+	tail.select("#size", {search: true, animate: true, classNames: "default white", multiSelectAll: true});
+	tail.select("#varietal", {search: true, animate: true, classNames: "default white", multiSelectAll: true});
+	tail.select("#mastercode", {search: true, animate: true, classNames: "default white", multiSelectAll: true});
+}
+</script>
+</body>
+
+
+<script>
+
+	var element = document.createElement("canvas");
+	element.setAttribute("id", "chart");
+	element.setAttribute("width", "1100");
+	element.setAttribute("height", "400");
+	document.getElementById("graph").appendChild(element);
+
+Chart.defaults.global.responsive = false;
+ 
+// define the chart data
+var chartData = {
+  labels : [{% for item in labels %}
+             "{{item}}",
+            {% endfor %}],
+  datasets : [{
+      label: '{{ legend }}',
+      fill: true,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data : [{% for item in values %}
+                {{item}},
+              {% endfor %}],
+      spanGaps: false
+  }]
+}
+ 
+// get chart canvas
+var ctx = document.getElementById("chart").getContext("2d");
+ 
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: chartData,
+});
+</script>
+
+<script>
+counter=0;
+function inputMethod(){
+	var Index = document.forecastgenerator.InputMethod.options[document.forecastgenerator.InputMethod.selectedIndex].value
+	if(Index=="csv"){
+		if (counter=="0"){
+		var x = document.createElement("input");
+  		x.setAttribute("type", "file");
+		x.setAttribute("name", "csvfile");
+		x.setAttribute("id", "csvupload");
+		x.setAttribute("class","w-button");
+		x.setAttribute("accept",".csv,.xls,.xlsx");
+  		document.getElementById("generatordiv").appendChild(x);
+		counter++;
+		}
+	}
+
+}
+</script>
+
+<script>
+    function populateBrand() {
+        // THE JSON ARRAY.
+        var brands = [
+ {
+   "ID": "10 SPAN",
+   "brand_name": "10 SPAN"
+ },
+ {
+   "ID": "13 CELSIUS",
+   "brand_name": "13 CELSIUS"
+ },
+ {
+   "ID": "7 DEADLY",
+   "brand_name": "7 DEADLY"
+ },
+ {
+   "ID": "ALMADEN",
+   "brand_name": "ALMADEN"
+ },
+ {
+   "ID": "ANCIENT ROOTS",
+   "brand_name": "ANCIENT ROOTS"
+ },
+ {
+   "ID": "ANGEL FOOD",
+   "brand_name": "ANGEL FOOD"
+ },
+ {
+   "ID": "Artwork Artistic",
+   "brand_name": "Artwork Artistic"
+ },
+ {
+   "ID": "ASSEMBLAGE BLANC",
+   "brand_name": "ASSEMBLAGE BLANC"
+ },
+ {
+   "ID": "ASSEMBLAGE RED",
+   "brand_name": "ASSEMBLAGE RED"
+ },
+ {
+   "ID": "AVA GRACE",
+   "brand_name": "AVA GRACE"
+ },
+ {
+   "ID": "BAY BRIDGE",
+   "brand_name": "BAY BRIDGE"
+ },
+ {
+   "ID": "BEASTLY VINES",
+   "brand_name": "BEASTLY VINES"
+ },
+ {
+   "ID": "BENZIGER",
+   "brand_name": "BENZIGER"
+ },
+ {
+   "ID": "BESO DEL SOL",
+   "brand_name": "BESO DEL SOL"
+ },
+ {
+   "ID": "BIG HOUSE",
+   "brand_name": "BIG HOUSE"
+ },
+ {
+   "ID": "BUTTERKISSED CHARDONNAY",
+   "brand_name": "BUTTERKISSED CHARDONNAY"
+ },
+ {
+   "ID": "CHLOE",
+   "brand_name": "CHLOE"
+ },
+ {
+   "ID": "CONCANNON",
+   "brand_name": "CONCANNON"
+ },
+ {
+   "ID": "CORBETT CANYON",
+   "brand_name": "CORBETT CANYON"
+ },
+ {
+   "ID": "CUPCAKE",
+   "brand_name": "CUPCAKE"
+ },
+ {
+   "ID": "DEVILS FOOD",
+   "brand_name": "DEVILS FOOD"
+ },
+ {
+   "ID": "FIREFLY RIDGE",
+   "brand_name": "FIREFLY RIDGE"
+ },
+ {
+   "ID": "FISH EYE",
+   "brand_name": "FISH EYE"
+ },
+ {
+   "ID": "FLIP FLOP",
+   "brand_name": "FLIP FLOP"
+ },
+ {
+   "ID": "FOXHORN",
+   "brand_name": "FOXHORN"
+ },
+ {
+   "ID": "FRANZIA",
+   "brand_name": "FRANZIA"
+ },
+ {
+   "ID": "G&D",
+   "brand_name": "G&D"
+ },
+ {
+   "ID": "GRAY FOX",
+   "brand_name": "GRAY FOX"
+ },
+ {
+   "ID": "GRENACHE",
+   "brand_name": "GRENACHE"
+ },
+ {
+   "ID": "IMAGERY",
+   "brand_name": "IMAGERY"
+ },
+ {
+   "ID": "LEJON",
+   "brand_name": "LEJON"
+ },
+ {
+   "ID": "OAK CREEK",
+   "brand_name": "OAK CREEK"
+ },
+ {
+   "ID": "OAK LEAF",
+   "brand_name": "OAK LEAF"
+ },
+ {
+   "ID": "PACIFIC PEAK",
+   "brand_name": "PACIFIC PEAK"
+ },
+ {
+   "ID": "PETIT VERDOT",
+   "brand_name": "PETIT VERDOT"
+ },
+ {
+   "ID": "PINOT EVIL",
+   "brand_name": "PINOT EVIL"
+ },
+ {
+   "ID": "QUAIL OAK",
+   "brand_name": "QUAIL OAK"
+ },
+ {
+   "ID": "RUNNING W/SCISSORS",
+   "brand_name": "RUNNING W/SCISSORS"
+ },
+ {
+   "ID": "STAMPMAKER'S",
+   "brand_name": "STAMPMAKER'S"
+ },
+ {
+   "ID": "SUMMERFIELD",
+   "brand_name": "SUMMERFIELD"
+ },
+ {
+   "ID": "TRAPICHE",
+   "brand_name": "TRAPICHE"
+ },
+ {
+   "ID": "TRIBUNO",
+   "brand_name": "TRIBUNO"
+ },
+ {
+   "ID": "VIOGNIER",
+   "brand_name": "VIOGNIER"
+ },
+ {
+   "ID": "yellowtail",
+   "brand_name": "yellowtail"
+ },
+ {
+   "ID": "YOSEMITE RD",
+   "brand_name": "YOSEMITE RD"
+ },
+ {
+   "ID": "ZINFANDEL",
+   "brand_name": "ZINFANDEL"
+ }
+];
+
+        var ele = document.getElementById('brand');
+        for (var i = 0; i < brands.length; i++) {
+            // POPULATE SELECT ELEMENT WITH JSON.
+            ele.innerHTML = ele.innerHTML +
+                '<option value="' + brands[i]['ID'] + '">' + brands[i]['brand_name'] + '</option>';
+        }
+
+	//document.multiselect('#brand');
+
+
+}
+
+
+    function populateVarietal() {
+        // THE JSON ARRAY.
+        var varietals = [
+  {
+    "ID": "ALBARINO",
+    "varietal_name": "ALBARINO"
+  },
+  {
+    "ID": "ALEATICO",
+    "varietal_name": "ALEATICO"
+  },
+  {
+    "ID": "ARCTIC BERRY",
+    "varietal_name": "ARCTIC BERRY"
+  },
+  {
+    "ID": "BLACKBERRY",
+    "varietal_name": "BLACKBERRY"
+  },
+  {
+    "ID": "BLACKBERRY RED BLEND",
+    "varietal_name": "BLACKBERRY RED BLEND"
+  },
+  {
+    "ID": "BLANK",
+    "varietal_name": "BLANK"
+  },
+  {
+    "ID": "BLUE RASPBERRY",
+    "varietal_name": "BLUE RASPBERRY"
+  },
+  {
+    "ID": "BLUEBERRY FRUIT WINE",
+    "varietal_name": "BLUEBERRY FRUIT WINE"
+  },
+  {
+    "ID": "BLUSH",
+    "varietal_name": "BLUSH"
+  },
+  {
+    "ID": "BURGUNDY",
+    "varietal_name": "BURGUNDY"
+  },
+  {
+    "ID": "CABERNET FRANC",
+    "varietal_name": "CABERNET FRANC"
+  },
+  {
+    "ID": "CABERNET SAUVIGNON",
+    "varietal_name": "CABERNET SAUVIGNON"
+  },
+  {
+    "ID": "CARAMEL APPLE WHITE BLEND",
+    "varietal_name": "CARAMEL APPLE WHITE BLEND"
+  },
+  {
+    "ID": "CHABLIS",
+    "varietal_name": "CHABLIS"
+  },
+  {
+    "ID": "CHARDONNAY",
+    "varietal_name": "CHARDONNAY"
+  },
+  {
+    "ID": "CHARDONNAY RICH & BUTTERY",
+    "varietal_name": "CHARDONNAY RICH & BUTTERY"
+  },
+  {
+    "ID": "CHERRY RED BLEND",
+    "varietal_name": "CHERRY RED BLEND"
+  },
+  {
+    "ID": "CHIANTI",
+    "varietal_name": "CHIANTI"
+  },
+  {
+    "ID": "CHILLABLE RED",
+    "varietal_name": "CHILLABLE RED"
+  },
+  {
+    "ID": "CITRUS STORM",
+    "varietal_name": "CITRUS STORM"
+  },
+  {
+    "ID": "COCONUT",
+    "varietal_name": "COCONUT"
+  },
+  {
+    "ID": "CONCORD",
+    "varietal_name": "CONCORD"
+  },
+  {
+    "ID": "CRIMSON & CLOVER",
+    "varietal_name": "CRIMSON & CLOVER"
+  },
+  {
+    "ID": "CRISP WHITE",
+    "varietal_name": "CRISP WHITE"
+  },
+  {
+    "ID": "DOLCETTO",
+    "varietal_name": "DOLCETTO"
+  },
+  {
+    "ID": "DRAGON FRUIT",
+    "varietal_name": "DRAGON FRUIT"
+  },
+  {
+    "ID": "DRY VERMOUTH",
+    "varietal_name": "DRY VERMOUTH"
+  },
+  {
+    "ID": "ELECTRIC MELON",
+    "varietal_name": "ELECTRIC MELON"
+  },
+  {
+    "ID": "Estate Cabernet-Malbec",
+    "varietal_name": "Estate Cabernet-Malbec"
+  },
+  {
+    "ID": "Estate Cabernet-Petite Sirah",
+    "varietal_name": "Estate Cabernet-Petite Sirah"
+  },
+  {
+    "ID": "HABANERO LIME-ARITA",
+    "varietal_name": "HABANERO LIME-ARITA"
+  },
+  {
+    "ID": "KIT RED/WHITE MIXED",
+    "varietal_name": "KIT RED/WHITE MIXED"
+  },
+  {
+    "ID": "LAGREIN",
+    "varietal_name": "LAGREIN"
+  },
+  {
+    "ID": "MALBEC/CABERNET FRANC",
+    "varietal_name": "MALBEC/CABERNET FRANC"
+  },
+  {
+    "ID": "MARSALA",
+    "varietal_name": "MARSALA"
+  },
+  {
+    "ID": "MERLOT",
+    "varietal_name": "MERLOT"
+  },
+  {
+    "ID": "MOURVEDRE",
+    "varietal_name": "MOURVEDRE"
+  },
+  {
+    "ID": "MUSCAT (MOSCATO)",
+    "varietal_name": "MUSCAT (MOSCATO)"
+  },
+  {
+    "ID": "MUSCAT CANELLI (BLANC)",
+    "varietal_name": "MUSCAT CANELLI (BLANC)"
+  },
+  {
+    "ID": "ORANGE FLAME",
+    "varietal_name": "ORANGE FLAME"
+  },
+  {
+    "ID": "ORANGE JUBILEE",
+    "varietal_name": "ORANGE JUBILEE"
+  },
+  {
+    "ID": "PEACH WHITE BLEND",
+    "varietal_name": "PEACH WHITE BLEND"
+  },
+  {
+    "ID": "PEACHES AND CREAM",
+    "varietal_name": "PEACHES AND CREAM"
+  },
+  {
+    "ID": "PETITE SIRAH",
+    "varietal_name": "PETITE SIRAH"
+  },
+  {
+    "ID": "PINEAPPLE BLAST",
+    "varietal_name": "PINEAPPLE BLAST"
+  },
+  {
+    "ID": "PINK MOSCATO",
+    "varietal_name": "PINK MOSCATO"
+  },
+  {
+    "ID": "PINOT GRIGIO",
+    "varietal_name": "PINOT GRIGIO"
+  },
+  {
+    "ID": "PINOT GRIGIO/FR COLOMBARD",
+    "varietal_name": "PINOT GRIGIO/FR COLOMBARD"
+  },
+  {
+    "ID": "PINOT GRIS",
+    "varietal_name": "PINOT GRIS"
+  },
+  {
+    "ID": "PINOT NOIR",
+    "varietal_name": "PINOT NOIR"
+  },
+  {
+    "ID": "PINOT NOIR/CARMENERE",
+    "varietal_name": "PINOT NOIR/CARMENERE"
+  },
+  {
+    "ID": "POMEGRANATE",
+    "varietal_name": "POMEGRANATE"
+  },
+  {
+    "ID": "Port",
+    "varietal_name": "Port"
+  },
+  {
+    "ID": "PRIMATIVO ZINFANDEL",
+    "varietal_name": "PRIMATIVO ZINFANDEL"
+  },
+  {
+    "ID": "Red",
+    "varietal_name": "Red"
+  },
+  {
+    "ID": "RED SANGRIA",
+    "varietal_name": "RED SANGRIA"
+  },
+  {
+    "ID": "REFRESHING WHITE",
+    "varietal_name": "REFRESHING WHITE"
+  },
+  {
+    "ID": "RHINE",
+    "varietal_name": "RHINE"
+  },
+  {
+    "ID": "RIESLING",
+    "varietal_name": "RIESLING"
+  },
+  {
+    "ID": "ROASTED OAK RED BLEND",
+    "varietal_name": "ROASTED OAK RED BLEND"
+  },
+  {
+    "ID": "ROSE",
+    "varietal_name": "ROSE"
+  },
+  {
+    "ID": "ROSE SANGRIA",
+    "varietal_name": "ROSE SANGRIA"
+  },
+  {
+    "ID": "SANGIOVESE (SANGIOVETO)",
+    "varietal_name": "SANGIOVESE (SANGIOVETO)"
+  },
+  {
+    "ID": "SHIRAZ",
+    "varietal_name": "SHIRAZ"
+  },
+  {
+    "ID": "SPANISH RED",
+    "varietal_name": "SPANISH RED"
+  },
+  {
+    "ID": "STRAWBERRY KIWI",
+    "varietal_name": "STRAWBERRY KIWI"
+  },
+  {
+    "ID": "STRAWBERRY ROSE",
+    "varietal_name": "STRAWBERRY ROSE"
+  },
+  {
+    "ID": "SWEET RED",
+    "varietal_name": "SWEET RED"
+  },
+  {
+    "ID": "SWEET VERMOUTH",
+    "varietal_name": "SWEET VERMOUTH"
+  },
+  {
+    "ID": "SYRAH/VIOGNER",
+    "varietal_name": "SYRAH/VIOGNER"
+  },
+  {
+    "ID": "TANNAT",
+    "varietal_name": "TANNAT"
+  },
+  {
+    "ID": "TEMPRANILLO",
+    "varietal_name": "TEMPRANILLO"
+  },
+  {
+    "ID": "TEROLDEGO",
+    "varietal_name": "TEROLDEGO"
+  },
+  {
+    "ID": "TROPICAL WHITE BLEND",
+    "varietal_name": "TROPICAL WHITE BLEND"
+  },
+  {
+    "ID": "WHITE",
+    "varietal_name": "WHITE"
+  },
+  {
+    "ID": "WHITE BURGUNDY",
+    "varietal_name": "WHITE BURGUNDY"
+  },
+  {
+    "ID": "WHITE GRENACHE",
+    "varietal_name": "WHITE GRENACHE"
+  },
+  {
+    "ID": "WHITE MERLOT",
+    "varietal_name": "WHITE MERLOT"
+  },
+  {
+    "ID": "WHITE ZINFANDEL",
+    "varietal_name": "WHITE ZINFANDEL"
+  }
+];
+
+        var ele = document.getElementById('varietal');
+        for (var i = 0; i < varietals.length; i++) {
+            // POPULATE SELECT ELEMENT WITH JSON.
+            ele.innerHTML = ele.innerHTML +
+                '<option value="' + varietals[i]['ID'] + '">' + varietals[i]['varietal_name'] + '</option>';
+        }
+	//document.multiselect('#varietal');
+
+    }
+
+
+
+function populateSize() {
+        // THE JSON ARRAY.
+        var sizes = [
+  {
+    "ID": "187ML",
+    "size_name": "187ML"
+  },
+  {
+    "ID": "250ML",
+    "size_name": "250ML"
+  },
+  {
+    "ID": "375ML",
+    "size_name": "375ML"
+  },
+  {
+    "ID": "500ML",
+    "size_name": "500ML"
+  },
+  {
+    "ID": "750ML",
+    "size_name": "750ML"
+  },
+  {
+    "ID": "1.0L",
+    "size_name": "1.0L"
+  },
+  {
+    "ID": "1.5L",
+    "size_name": "1.5L"
+  },
+  {
+    "ID": "3.0L",
+    "size_name": "3.0L"
+  },
+  {
+    "ID": "5.0L",
+    "size_name": "5.0L"
+  },
+  {
+    "ID": "6.0L",
+    "size_name": "6.0L"
+  },
+  {
+    "ID": "9.0L",
+    "size_name": "9.0L"
+  },
+  {
+    "ID": "19.5L",
+    "size_name": "19.5L"
+  }
+];
+
+        var ele = document.getElementById('size');
+        for (var i = 0; i < sizes.length; i++) {
+            // POPULATE SELECT ELEMENT WITH JSON.
+            ele.innerHTML = ele.innerHTML +
+                '<option value="' + sizes[i]['ID'] + '">' + sizes[i]['size_name'] + '</option>';
+        }
+	//document.multiselect('#size');
+    }
+
+function populateMaster() {
+        // THE JSON ARRAY.
+        var masters = [
+ {
+   "ID": "MP646019",
+   "master_code": "MP646019"
+ },
+ {
+   "ID": "MP652075",
+   "master_code": "MP652075"
+ },
+ {
+   "ID": "MP643075",
+   "master_code": "MP643075"
+ },
+ {
+   "ID": "MP665075",
+   "master_code": "MP665075"
+ },
+ {
+   "ID": "MQ246075",
+   "master_code": "MQ246075"
+ },
+ {
+   "ID": "MQ245075",
+   "master_code": "MQ245075"
+ },
+ {
+   "ID": "M11875",
+   "master_code": "M11875"
+ },
+ {
+   "ID": "M11876",
+   "master_code": "M11876"
+ },
+ {
+   "ID": "M11883",
+   "master_code": "M11883"
+ },
+ {
+   "ID": "M11869",
+   "master_code": "M11869"
+ },
+ {
+   "ID": "M11884",
+   "master_code": "M11884"
+ },
+ {
+   "ID": "M11873",
+   "master_code": "M11873"
+ },
+ {
+   "ID": "MD801015",
+   "master_code": "MD801015"
+ },
+ {
+   "ID": "MD874015",
+   "master_code": "MD874015"
+ },
+ {
+   "ID": "MD812015",
+   "master_code": "MD812015"
+ },
+ {
+   "ID": "MD82105",
+   "master_code": "MD82105"
+ },
+ {
+   "ID": "MD80105",
+   "master_code": "MD80105"
+ },
+ {
+   "ID": "MD82245",
+   "master_code": "MD82245"
+ },
+ {
+   "ID": "MD87405",
+   "master_code": "MD87405"
+ },
+ {
+   "ID": "MD82405",
+   "master_code": "MD82405"
+ },
+ {
+   "ID": "MD82025",
+   "master_code": "MD82025"
+ },
+ {
+   "ID": "MD80405",
+   "master_code": "MD80405"
+ },
+ {
+   "ID": "MD80825",
+   "master_code": "MD80825"
+ },
+ {
+   "ID": "MD81225",
+   "master_code": "MD81225"
+ },
+ {
+   "ID": "MR160075",
+   "master_code": "MR160075"
+ },
+ {
+   "ID": "MR150075",
+   "master_code": "MR150075"
+ },
+ {
+   "ID": "M11936",
+   "master_code": "M11936"
+ },
+ {
+   "ID": "M11934",
+   "master_code": "M11934"
+ },
+ {
+   "ID": "M11935",
+   "master_code": "M11935"
+ },
+ {
+   "ID": "MQ472037",
+   "master_code": "MQ472037"
+ },
+ {
+   "ID": "MQ450037",
+   "master_code": "MQ450037"
+ },
+ {
+   "ID": "MQ440075",
+   "master_code": "MQ440075"
+ },
+ {
+   "ID": "MQ458075",
+   "master_code": "MQ458075"
+ },
+ {
+   "ID": "MQ457075",
+   "master_code": "MQ457075"
+ },
+ {
+   "ID": "MQ446075",
+   "master_code": "MQ446075"
+ },
+ {
+   "ID": "MQ450075",
+   "master_code": "MQ450075"
+ },
+ {
+   "ID": "MQ450175",
+   "master_code": "MQ450175"
+ },
+ {
+   "ID": "MQ459075",
+   "master_code": "MQ459075"
+ },
+ {
+   "ID": "MQ443075",
+   "master_code": "MQ443075"
+ },
+ {
+   "ID": "MQ444075",
+   "master_code": "MQ444075"
+ },
+ {
+   "ID": "M11890",
+   "master_code": "M11890"
+ },
+ {
+   "ID": "M11891",
+   "master_code": "M11891"
+ },
+ {
+   "ID": "M11892",
+   "master_code": "M11892"
+ },
+ {
+   "ID": "MB152075",
+   "master_code": "MB152075"
+ },
+ {
+   "ID": "MB140075",
+   "master_code": "MB140075"
+ },
+ {
+   "ID": "MB158075",
+   "master_code": "MB158075"
+ },
+ {
+   "ID": "MB174075",
+   "master_code": "MB174075"
+ },
+ {
+   "ID": "MB146075",
+   "master_code": "MB146075"
+ },
+ {
+   "ID": "MB150075",
+   "master_code": "MB150075"
+ },
+ {
+   "ID": "MB149075",
+   "master_code": "MB149075"
+ },
+ {
+   "ID": "M11905",
+   "master_code": "M11905"
+ },
+ {
+   "ID": "MR542019",
+   "master_code": "MR542019"
+ },
+ {
+   "ID": "M5081C",
+   "master_code": "M5081C"
+ },
+ {
+   "ID": "M5081",
+   "master_code": "M5081"
+ },
+ {
+   "ID": "M5061",
+   "master_code": "M5061"
+ },
+ {
+   "ID": "M5061C",
+   "master_code": "M5061C"
+ },
+ {
+   "ID": "M5171",
+   "master_code": "M5171"
+ },
+ {
+   "ID": "M5171C",
+   "master_code": "M5171C"
+ },
+ {
+   "ID": "M5991",
+   "master_code": "M5991"
+ },
+ {
+   "ID": "M5141C",
+   "master_code": "M5141C"
+ },
+ {
+   "ID": "M5141",
+   "master_code": "M5141"
+ },
+ {
+   "ID": "M11766",
+   "master_code": "M11766"
+ },
+ {
+   "ID": "M11765",
+   "master_code": "M11765"
+ },
+ {
+   "ID": "M11767",
+   "master_code": "M11767"
+ },
+ {
+   "ID": "M11769",
+   "master_code": "M11769"
+ },
+ {
+   "ID": "M5161",
+   "master_code": "M5161"
+ },
+ {
+   "ID": "M11837",
+   "master_code": "M11837"
+ },
+ {
+   "ID": "M11835",
+   "master_code": "M11835"
+ },
+ {
+   "ID": "M11836",
+   "master_code": "M11836"
+ },
+ {
+   "ID": "M11834",
+   "master_code": "M11834"
+ },
+ {
+   "ID": "M11832",
+   "master_code": "M11832"
+ },
+ {
+   "ID": "M11833",
+   "master_code": "M11833"
+ },
+ {
+   "ID": "M11842",
+   "master_code": "M11842"
+ },
+ {
+   "ID": "M11840",
+   "master_code": "M11840"
+ },
+ {
+   "ID": "M11841",
+   "master_code": "M11841"
+ },
+ {
+   "ID": "M11847",
+   "master_code": "M11847"
+ },
+ {
+   "ID": "M8661026",
+   "master_code": "M8661026"
+ },
+ {
+   "ID": "M8648026",
+   "master_code": "M8648026"
+ },
+ {
+   "ID": "M8650026",
+   "master_code": "M8650026"
+ },
+ {
+   "ID": "M866203P",
+   "master_code": "M866203P"
+ },
+ {
+   "ID": "M862203P",
+   "master_code": "M862203P"
+ },
+ {
+   "ID": "M8653436",
+   "master_code": "M8653436"
+ },
+ {
+   "ID": "M8645436",
+   "master_code": "M8645436"
+ },
+ {
+   "ID": "M8646036",
+   "master_code": "M8646036"
+ },
+ {
+   "ID": "M8665036",
+   "master_code": "M8665036"
+ },
+ {
+   "ID": "M8620136",
+   "master_code": "M8620136"
+ },
+ {
+   "ID": "M8630036",
+   "master_code": "M8630036"
+ },
+ {
+   "ID": "M8661336",
+   "master_code": "M8661336"
+ },
+ {
+   "ID": "M8662075",
+   "master_code": "M8662075"
+ },
+ {
+   "ID": "M8646075",
+   "master_code": "M8646075"
+ },
+ {
+   "ID": "M8648075",
+   "master_code": "M8648075"
+ },
+ {
+   "ID": "M8620075",
+   "master_code": "M8620075"
+ },
+ {
+   "ID": "M8621075",
+   "master_code": "M8621075"
+ },
+ {
+   "ID": "MH60113",
+   "master_code": "MH60113"
+ },
+ {
+   "ID": "MH62393",
+   "master_code": "MH62393"
+ },
+ {
+   "ID": "MF277175",
+   "master_code": "MF277175"
+ },
+ {
+   "ID": "M11794",
+   "master_code": "M11794"
+ },
+ {
+   "ID": "M11789",
+   "master_code": "M11789"
+ },
+ {
+   "ID": "M11791",
+   "master_code": "M11791"
+ },
+ {
+   "ID": "M11792",
+   "master_code": "M11792"
+ },
+ {
+   "ID": "M11790",
+   "master_code": "M11790"
+ },
+ {
+   "ID": "M11793",
+   "master_code": "M11793"
+ },
+ {
+   "ID": "MN950075",
+   "master_code": "MN950075"
+ },
+ {
+   "ID": "M11893",
+   "master_code": "M11893"
+ },
+ {
+   "ID": "M11894",
+   "master_code": "M11894"
+ },
+ {
+   "ID": "M11895",
+   "master_code": "M11895"
+ },
+ {
+   "ID": "MT752075",
+   "master_code": "MT752075"
+ },
+ {
+   "ID": "MT740075",
+   "master_code": "MT740075"
+ },
+ {
+   "ID": "MT782075",
+   "master_code": "MT782075"
+ },
+ {
+   "ID": "MT773075",
+   "master_code": "MT773075"
+ },
+ {
+   "ID": "M11889",
+   "master_code": "M11889"
+ },
+ {
+   "ID": "M11859",
+   "master_code": "M11859"
+ },
+ {
+   "ID": "ME241019",
+   "master_code": "ME241019"
+ },
+ {
+   "ID": "ME250019",
+   "master_code": "ME250019"
+ },
+ {
+   "ID": "ME253075",
+   "master_code": "ME253075"
+ },
+ {
+   "ID": "ME240075",
+   "master_code": "ME240075"
+ },
+ {
+   "ID": "ME242075",
+   "master_code": "ME242075"
+ },
+ {
+   "ID": "ME257075",
+   "master_code": "ME257075"
+ },
+ {
+   "ID": "ME246075",
+   "master_code": "ME246075"
+ },
+ {
+   "ID": "ME255075",
+   "master_code": "ME255075"
+ },
+ {
+   "ID": "ME220075",
+   "master_code": "ME220075"
+ },
+ {
+   "ID": "ME250075",
+   "master_code": "ME250075"
+ },
+ {
+   "ID": "ME221075",
+   "master_code": "ME221075"
+ },
+ {
+   "ID": "ME243075",
+   "master_code": "ME243075"
+ },
+ {
+   "ID": "ME248075",
+   "master_code": "ME248075"
+ },
+ {
+   "ID": "ME249075",
+   "master_code": "ME249075"
+ },
+ {
+   "ID": "ME280075",
+   "master_code": "ME280075"
+ },
+ {
+   "ID": "M12109",
+   "master_code": "M12109"
+ },
+ {
+   "ID": "M7182019",
+   "master_code": "M7182019"
+ },
+ {
+   "ID": "M7187075",
+   "master_code": "M7187075"
+ },
+ {
+   "ID": "M7184675",
+   "master_code": "M7184675"
+ },
+ {
+   "ID": "M7152175",
+   "master_code": "M7152175"
+ },
+ {
+   "ID": "M7140175",
+   "master_code": "M7140175"
+ },
+ {
+   "ID": "M7158175",
+   "master_code": "M7158175"
+ },
+ {
+   "ID": "M7145175",
+   "master_code": "M7145175"
+ },
+ {
+   "ID": "M7155075",
+   "master_code": "M7155075"
+ },
+ {
+   "ID": "M7156475",
+   "master_code": "M7156475"
+ },
+ {
+   "ID": "M7143175",
+   "master_code": "M7143175"
+ },
+ {
+   "ID": "M7182375",
+   "master_code": "M7182375"
+ },
+ {
+   "ID": "M7180375",
+   "master_code": "M7180375"
+ },
+ {
+   "ID": "M7184275",
+   "master_code": "M7184275"
+ },
+ {
+   "ID": "M7182475",
+   "master_code": "M7182475"
+ },
+ {
+   "ID": "M11961",
+   "master_code": "M11961"
+ },
+ {
+   "ID": "M11959",
+   "master_code": "M11959"
+ },
+ {
+   "ID": "M11962",
+   "master_code": "M11962"
+ },
+ {
+   "ID": "M12086",
+   "master_code": "M12086"
+ },
+ {
+   "ID": "M11960",
+   "master_code": "M11960"
+ },
+ {
+   "ID": "M11965",
+   "master_code": "M11965"
+ },
+ {
+   "ID": "MF460075",
+   "master_code": "MF460075"
+ },
+ {
+   "ID": "MR260075",
+   "master_code": "MR260075"
+ },
+ {
+   "ID": "MF451075",
+   "master_code": "MF451075"
+ },
+ {
+   "ID": "M11853",
+   "master_code": "M11853"
+ },
+ {
+   "ID": "M12089",
+   "master_code": "M12089"
+ },
+ {
+   "ID": "M12090",
+   "master_code": "M12090"
+ },
+ {
+   "ID": "MU653075",
+   "master_code": "MU653075"
+ },
+ {
+   "ID": "MU640075",
+   "master_code": "MU640075"
+ },
+ {
+   "ID": "M3021015",
+   "master_code": "M3021015"
+ },
+ {
+   "ID": "M3001015",
+   "master_code": "M3001015"
+ },
+ {
+   "ID": "M3022415",
+   "master_code": "M3022415"
+ },
+ {
+   "ID": "M3046015",
+   "master_code": "M3046015"
+ },
+ {
+   "ID": "M3078015",
+   "master_code": "M3078015"
+ },
+ {
+   "ID": "M3002015",
+   "master_code": "M3002015"
+ },
+ {
+   "ID": "M3012015",
+   "master_code": "M3012015"
+ },
+ {
+   "ID": "M3012115",
+   "master_code": "M3012115"
+ },
+ {
+   "ID": "M3052636",
+   "master_code": "M3052636"
+ },
+ {
+   "ID": "M304003P",
+   "master_code": "M304003P"
+ },
+ {
+   "ID": "M3058636",
+   "master_code": "M3058636"
+ },
+ {
+   "ID": "M3044436",
+   "master_code": "M3044436"
+ },
+ {
+   "ID": "M3079236",
+   "master_code": "M3079236"
+ },
+ {
+   "ID": "M3049736",
+   "master_code": "M3049736"
+ },
+ {
+   "ID": "M11798",
+   "master_code": "M11798"
+ },
+ {
+   "ID": "M11797",
+   "master_code": "M11797"
+ },
+ {
+   "ID": "M11800",
+   "master_code": "M11800"
+ },
+ {
+   "ID": "M11799",
+   "master_code": "M11799"
+ },
+ {
+   "ID": "MH852075",
+   "master_code": "MH852075"
+ },
+ {
+   "ID": "MH840075",
+   "master_code": "MH840075"
+ },
+ {
+   "ID": "MH858075",
+   "master_code": "MH858075"
+ },
+ {
+   "ID": "MH882075",
+   "master_code": "MH882075"
+ },
+ {
+   "ID": "MH846075",
+   "master_code": "MH846075"
+ },
+ {
+   "ID": "MH849075",
+   "master_code": "MH849075"
+ },
+ {
+   "ID": "MA680187",
+   "master_code": "MA680187"
+ },
+ {
+   "ID": "MA680087",
+   "master_code": "MA680087"
+ },
+ {
+   "ID": "MA640019",
+   "master_code": "MA640019"
+ },
+ {
+   "ID": "M11933",
+   "master_code": "M11933"
+ },
+ {
+   "ID": "M11932",
+   "master_code": "M11932"
+ },
+ {
+   "ID": "MA671034",
+   "master_code": "MA671034"
+ },
+ {
+   "ID": "M11901",
+   "master_code": "M11901"
+ },
+ {
+   "ID": "M11902",
+   "master_code": "M11902"
+ },
+ {
+   "ID": "M11903",
+   "master_code": "M11903"
+ },
+ {
+   "ID": "MA650037",
+   "master_code": "MA650037"
+ },
+ {
+   "ID": "MA642037",
+   "master_code": "MA642037"
+ },
+ {
+   "ID": "MA64407S",
+   "master_code": "MA64407S"
+ },
+ {
+   "ID": "MA630075",
+   "master_code": "MA630075"
+ },
+ {
+   "ID": "MA660375",
+   "master_code": "MA660375"
+ },
+ {
+   "ID": "MA661075",
+   "master_code": "MA661075"
+ },
+ {
+   "ID": "MA637075",
+   "master_code": "MA637075"
+ },
+ {
+   "ID": "MA652075",
+   "master_code": "MA652075"
+ },
+ {
+   "ID": "MA653075",
+   "master_code": "MA653075"
+ },
+ {
+   "ID": "MA640075",
+   "master_code": "MA640075"
+ },
+ {
+   "ID": "MA642175",
+   "master_code": "MA642175"
+ },
+ {
+   "ID": "MA642075",
+   "master_code": "MA642075"
+ },
+ {
+   "ID": "MA658075",
+   "master_code": "MA658075"
+ },
+ {
+   "ID": "MA682175",
+   "master_code": "MA682175"
+ },
+ {
+   "ID": "MA649075",
+   "master_code": "MA649075"
+ },
+ {
+   "ID": "MA656075",
+   "master_code": "MA656075"
+ },
+ {
+   "ID": "MA670075",
+   "master_code": "MA670075"
+ },
+ {
+   "ID": "MA671075",
+   "master_code": "MA671075"
+ },
+ {
+   "ID": "MA650175",
+   "master_code": "MA650175"
+ },
+ {
+   "ID": "MA654075",
+   "master_code": "MA654075"
+ },
+ {
+   "ID": "MA639075",
+   "master_code": "MA639075"
+ },
+ {
+   "ID": "MA646075",
+   "master_code": "MA646075"
+ },
+ {
+   "ID": "MA650275",
+   "master_code": "MA650275"
+ },
+ {
+   "ID": "MA677075",
+   "master_code": "MA677075"
+ },
+ {
+   "ID": "MA682075",
+   "master_code": "MA682075"
+ },
+ {
+   "ID": "MA672075",
+   "master_code": "MA672075"
+ },
+ {
+   "ID": "MA680075",
+   "master_code": "MA680075"
+ },
+ {
+   "ID": "MA643075",
+   "master_code": "MA643075"
+ },
+ {
+   "ID": "MA662075",
+   "master_code": "MA662075"
+ },
+ {
+   "ID": "MA674075",
+   "master_code": "MA674075"
+ },
+ {
+   "ID": "MA688075",
+   "master_code": "MA688075"
+ },
+ {
+   "ID": "M11858",
+   "master_code": "M11858"
+ },
+ {
+   "ID": "MJ152075",
+   "master_code": "MJ152075"
+ },
+ {
+   "ID": "MJ140075",
+   "master_code": "MJ140075"
+ },
+ {
+   "ID": "MJ157075",
+   "master_code": "MJ157075"
+ },
+ {
+   "ID": "MJ159075",
+   "master_code": "MJ159075"
+ },
+ {
+   "ID": "MJ149075",
+   "master_code": "MJ149075"
+ },
+ {
+   "ID": "MS150075",
+   "master_code": "MS150075"
+ },
+ {
+   "ID": "M12106",
+   "master_code": "M12106"
+ },
+ {
+   "ID": "M12107",
+   "master_code": "M12107"
+ },
+ {
+   "ID": "M8252075",
+   "master_code": "M8252075"
+ },
+ {
+   "ID": "M8240075",
+   "master_code": "M8240075"
+ },
+ {
+   "ID": "M8258075",
+   "master_code": "M8258075"
+ },
+ {
+   "ID": "M8274075",
+   "master_code": "M8274075"
+ },
+ {
+   "ID": "MT652075",
+   "master_code": "MT652075"
+ },
+ {
+   "ID": "MT656075",
+   "master_code": "MT656075"
+ },
+ {
+   "ID": "MT643075",
+   "master_code": "MT643075"
+ },
+ {
+   "ID": "M5752075",
+   "master_code": "M5752075"
+ },
+ {
+   "ID": "M5740075",
+   "master_code": "M5740075"
+ },
+ {
+   "ID": "M5758075",
+   "master_code": "M5758075"
+ },
+ {
+   "ID": "M5759075",
+   "master_code": "M5759075"
+ },
+ {
+   "ID": "M5755075",
+   "master_code": "M5755075"
+ },
+ {
+   "ID": "M5760075",
+   "master_code": "M5760075"
+ },
+ {
+   "ID": "M3852015",
+   "master_code": "M3852015"
+ },
+ {
+   "ID": "M3840015",
+   "master_code": "M3840015"
+ },
+ {
+   "ID": "M3858015",
+   "master_code": "M3858015"
+ },
+ {
+   "ID": "M3859015",
+   "master_code": "M3859015"
+ },
+ {
+   "ID": "M3851015",
+   "master_code": "M3851015"
+ },
+ {
+   "ID": "M3852536",
+   "master_code": "M3852536"
+ },
+ {
+   "ID": "M3841036",
+   "master_code": "M3841036"
+ },
+ {
+   "ID": "M3858036",
+   "master_code": "M3858036"
+ },
+ {
+   "ID": "M3882536",
+   "master_code": "M3882536"
+ },
+ {
+   "ID": "M3858536",
+   "master_code": "M3858536"
+ },
+ {
+   "ID": "M3865036",
+   "master_code": "M3865036"
+ },
+ {
+   "ID": "M3843036",
+   "master_code": "M3843036"
+ },
+ {
+   "ID": "M3849036",
+   "master_code": "M3849036"
+ },
+ {
+   "ID": "M3852075",
+   "master_code": "M3852075"
+ },
+ {
+   "ID": "M3840075",
+   "master_code": "M3840075"
+ },
+ {
+   "ID": "M3858075",
+   "master_code": "M3858075"
+ },
+ {
+   "ID": "M3882075",
+   "master_code": "M3882075"
+ },
+ {
+   "ID": "M3859075",
+   "master_code": "M3859075"
+ },
+ {
+   "ID": "M3865075",
+   "master_code": "M3865075"
+ },
+ {
+   "ID": "M3851075",
+   "master_code": "M3851075"
+ },
+ {
+   "ID": "MH152015",
+   "master_code": "MH152015"
+ },
+ {
+   "ID": "MH140015",
+   "master_code": "MH140015"
+ },
+ {
+   "ID": "MH182015",
+   "master_code": "MH182015"
+ },
+ {
+   "ID": "MH159015",
+   "master_code": "MH159015"
+ },
+ {
+   "ID": "MH127025",
+   "master_code": "MH127025"
+ },
+ {
+   "ID": "MH150026",
+   "master_code": "MH150026"
+ },
+ {
+   "ID": "MH128025",
+   "master_code": "MH128025"
+ },
+ {
+   "ID": "MH152075",
+   "master_code": "MH152075"
+ },
+ {
+   "ID": "MH153075",
+   "master_code": "MH153075"
+ },
+ {
+   "ID": "MH140075",
+   "master_code": "MH140075"
+ },
+ {
+   "ID": "MH158075",
+   "master_code": "MH158075"
+ },
+ {
+   "ID": "MH182075",
+   "master_code": "MH182075"
+ },
+ {
+   "ID": "MH173075",
+   "master_code": "MH173075"
+ },
+ {
+   "ID": "MH159075",
+   "master_code": "MH159075"
+ },
+ {
+   "ID": "MH155075",
+   "master_code": "MH155075"
+ },
+ {
+   "ID": "MH178075",
+   "master_code": "MH178075"
+ },
+ {
+   "ID": "M1521015",
+   "master_code": "M1521015"
+ },
+ {
+   "ID": "M1501015",
+   "master_code": "M1501015"
+ },
+ {
+   "ID": "M1522415",
+   "master_code": "M1522415"
+ },
+ {
+   "ID": "M1545015",
+   "master_code": "M1545015"
+ },
+ {
+   "ID": "M1512015",
+   "master_code": "M1512015"
+ },
+ {
+   "ID": "M1020815",
+   "master_code": "M1020815"
+ },
+ {
+   "ID": "M1008215",
+   "master_code": "M1008215"
+ },
+ {
+   "ID": "M1021715",
+   "master_code": "M1021715"
+ },
+ {
+   "ID": "M1011215",
+   "master_code": "M1011215"
+ },
+ {
+   "ID": "M1021415",
+   "master_code": "M1021415"
+ },
+ {
+   "ID": "M1001115",
+   "master_code": "M1001115"
+ },
+ {
+   "ID": "M1015015",
+   "master_code": "M1015015"
+ },
+ {
+   "ID": "M1022515",
+   "master_code": "M1022515"
+ },
+ {
+   "ID": "M1074115",
+   "master_code": "M1074115"
+ },
+ {
+   "ID": "M1073115",
+   "master_code": "M1073115"
+ },
+ {
+   "ID": "M1009315",
+   "master_code": "M1009315"
+ },
+ {
+   "ID": "M1012215",
+   "master_code": "M1012215"
+ },
+ {
+   "ID": "M11862",
+   "master_code": "M11862"
+ },
+ {
+   "ID": "M102063",
+   "master_code": "M102063"
+ },
+ {
+   "ID": "M100833",
+   "master_code": "M100833"
+ },
+ {
+   "ID": "M102153",
+   "master_code": "M102153"
+ },
+ {
+   "ID": "M101103",
+   "master_code": "M101103"
+ },
+ {
+   "ID": "M11783",
+   "master_code": "M11783"
+ },
+ {
+   "ID": "M102143",
+   "master_code": "M102143"
+ },
+ {
+   "ID": "M100103",
+   "master_code": "M100103"
+ },
+ {
+   "ID": "M101503",
+   "master_code": "M101503"
+ },
+ {
+   "ID": "M102243",
+   "master_code": "M102243"
+ },
+ {
+   "ID": "M100743",
+   "master_code": "M100743"
+ },
+ {
+   "ID": "M100913",
+   "master_code": "M100913"
+ },
+ {
+   "ID": "M102453",
+   "master_code": "M102453"
+ },
+ {
+   "ID": "M102023",
+   "master_code": "M102023"
+ },
+ {
+   "ID": "M100433",
+   "master_code": "M100433"
+ },
+ {
+   "ID": "M101223",
+   "master_code": "M101223"
+ },
+ {
+   "ID": "M12130",
+   "master_code": "M12130"
+ },
+ {
+   "ID": "M12128",
+   "master_code": "M12128"
+ },
+ {
+   "ID": "M1008250",
+   "master_code": "M1008250"
+ },
+ {
+   "ID": "M1011150",
+   "master_code": "M1011150"
+ },
+ {
+   "ID": "M11849",
+   "master_code": "M11849"
+ },
+ {
+   "ID": "M11848",
+   "master_code": "M11848"
+ },
+ {
+   "ID": "M12001",
+   "master_code": "M12001"
+ },
+ {
+   "ID": "M12118",
+   "master_code": "M12118"
+ },
+ {
+   "ID": "M11861",
+   "master_code": "M11861"
+ },
+ {
+   "ID": "M102065",
+   "master_code": "M102065"
+ },
+ {
+   "ID": "M100705",
+   "master_code": "M100705"
+ },
+ {
+   "ID": "M102005",
+   "master_code": "M102005"
+ },
+ {
+   "ID": "M103725",
+   "master_code": "M103725"
+ },
+ {
+   "ID": "M101105",
+   "master_code": "M101105"
+ },
+ {
+   "ID": "M102105",
+   "master_code": "M102105"
+ },
+ {
+   "ID": "M100105",
+   "master_code": "M100105"
+ },
+ {
+   "ID": "M101505",
+   "master_code": "M101505"
+ },
+ {
+   "ID": "M102245",
+   "master_code": "M102245"
+ },
+ {
+   "ID": "M107405",
+   "master_code": "M107405"
+ },
+ {
+   "ID": "M107315",
+   "master_code": "M107315"
+ },
+ {
+   "ID": "M100915",
+   "master_code": "M100915"
+ },
+ {
+   "ID": "M102455",
+   "master_code": "M102455"
+ },
+ {
+   "ID": "M101035",
+   "master_code": "M101035"
+ },
+ {
+   "ID": "M101965",
+   "master_code": "M101965"
+ },
+ {
+   "ID": "M101405",
+   "master_code": "M101405"
+ },
+ {
+   "ID": "M102035",
+   "master_code": "M102035"
+ },
+ {
+   "ID": "M100885",
+   "master_code": "M100885"
+ },
+ {
+   "ID": "M101225",
+   "master_code": "M101225"
+ },
+ {
+   "ID": "M12129",
+   "master_code": "M12129"
+ },
+ {
+   "ID": "M12127",
+   "master_code": "M12127"
+ },
+ {
+   "ID": "M5575075",
+   "master_code": "M5575075"
+ },
+ {
+   "ID": "M7053015",
+   "master_code": "M7053015"
+ },
+ {
+   "ID": "M7040015",
+   "master_code": "M7040015"
+ },
+ {
+   "ID": "M7058015",
+   "master_code": "M7058015"
+ },
+ {
+   "ID": "M7072015",
+   "master_code": "M7072015"
+ },
+ {
+   "ID": "M7053075",
+   "master_code": "M7053075"
+ },
+ {
+   "ID": "M7040075",
+   "master_code": "M7040075"
+ },
+ {
+   "ID": "M7042075",
+   "master_code": "M7042075"
+ },
+ {
+   "ID": "MD621075",
+   "master_code": "MD621075"
+ },
+ {
+   "ID": "MD640075",
+   "master_code": "MD640075"
+ },
+ {
+   "ID": "MD646075",
+   "master_code": "MD646075"
+ },
+ {
+   "ID": "MD620075",
+   "master_code": "MD620075"
+ },
+ {
+   "ID": "M1455015",
+   "master_code": "M1455015"
+ },
+ {
+   "ID": "M1443015",
+   "master_code": "M1443015"
+ },
+ {
+   "ID": "M1440075",
+   "master_code": "M1440075"
+ },
+ {
+   "ID": "MC752075",
+   "master_code": "MC752075"
+ },
+ {
+   "ID": "MC740075",
+   "master_code": "MC740075"
+ },
+ {
+   "ID": "MC758075",
+   "master_code": "MC758075"
+ },
+ {
+   "ID": "MC759075",
+   "master_code": "MC759075"
+ },
+ {
+   "ID": "M11963",
+   "master_code": "M11963"
+ },
+ {
+   "ID": "MS740019",
+   "master_code": "MS740019"
+ },
+ {
+   "ID": "MS757019",
+   "master_code": "MS757019"
+ },
+ {
+   "ID": "M12099",
+   "master_code": "M12099"
+ },
+ {
+   "ID": "M12098",
+   "master_code": "M12098"
+ },
+ {
+   "ID": "MS752075",
+   "master_code": "MS752075"
+ },
+ {
+   "ID": "MS740075",
+   "master_code": "MS740075"
+ },
+ {
+   "ID": "MS757075",
+   "master_code": "MS757075"
+ },
+ {
+   "ID": "MS745075",
+   "master_code": "MS745075"
+ },
+ {
+   "ID": "MS751075",
+   "master_code": "MS751075"
+ },
+ {
+   "ID": "MS741075",
+   "master_code": "MS741075"
+ },
+ {
+   "ID": "MN553075",
+   "master_code": "MN553075"
+ },
+ {
+   "ID": "MN558075",
+   "master_code": "MN558075"
+ },
+ {
+   "ID": "M11878",
+   "master_code": "M11878"
+ },
+ {
+   "ID": "M11877",
+   "master_code": "M11877"
+ },
+ {
+   "ID": "MH340075",
+   "master_code": "MH340075"
+ },
+ {
+   "ID": "MH360075",
+   "master_code": "MH360075"
+ },
+ {
+   "ID": "MH377075",
+   "master_code": "MH377075"
+ },
+ {
+   "ID": "MH346075",
+   "master_code": "MH346075"
+ },
+ {
+   "ID": "MH355075",
+   "master_code": "MH355075"
+ },
+ {
+   "ID": "MH380075",
+   "master_code": "MH380075"
+ },
+ {
+   "ID": "MH320075",
+   "master_code": "MH320075"
+ },
+ {
+   "ID": "MH343075",
+   "master_code": "MH343075"
+ },
+ {
+   "ID": "ME943075",
+   "master_code": "ME943075"
+ },
+ {
+   "ID": "M12094",
+   "master_code": "M12094"
+ },
+ {
+   "ID": "M12092",
+   "master_code": "M12092"
+ },
+ {
+   "ID": "M12093",
+   "master_code": "M12093"
+ },
+ {
+   "ID": "M12095",
+   "master_code": "M12095"
+ },
+ {
+   "ID": "M12097",
+   "master_code": "M12097"
+ },
+ {
+   "ID": "M12096",
+   "master_code": "M12096"
+ },
+ {
+   "ID": "MN778075",
+   "master_code": "MN778075"
+ },
+ {
+   "ID": "MN720075",
+   "master_code": "MN720075"
+ },
+ {
+   "ID": "MN750075",
+   "master_code": "MN750075"
+ },
+ {
+   "ID": "MN775075",
+   "master_code": "MN775075"
+ },
+ {
+   "ID": "MN725075",
+   "master_code": "MN725075"
+ },
+ {
+   "ID": "MF552076",
+   "master_code": "MF552076"
+ },
+ {
+   "ID": "MF540076",
+   "master_code": "MF540076"
+ },
+ {
+   "ID": "MF577076",
+   "master_code": "MF577076"
+ },
+ {
+   "ID": "MF574076",
+   "master_code": "MF574076"
+ },
+ {
+   "ID": "MF551076",
+   "master_code": "MF551076"
+ },
+ {
+   "ID": "M11917",
+   "master_code": "M11917"
+ },
+ {
+   "ID": "M11745",
+   "master_code": "M11745"
+ },
+ {
+   "ID": "M11746",
+   "master_code": "M11746"
+ },
+ {
+   "ID": "M12080",
+   "master_code": "M12080"
+ },
+ {
+   "ID": "M12081",
+   "master_code": "M12081"
+ },
+ {
+   "ID": "M12082",
+   "master_code": "M12082"
+ },
+ {
+   "ID": "M12083",
+   "master_code": "M12083"
+ },
+ {
+   "ID": "M12084",
+   "master_code": "M12084"
+ },
+ {
+   "ID": "M12085",
+   "master_code": "M12085"
+ },
+ {
+   "ID": "MU480075",
+   "master_code": "MU480075"
+ },
+ {
+   "ID": "MU453075",
+   "master_code": "MU453075"
+ },
+ {
+   "ID": "MU440075",
+   "master_code": "MU440075"
+ },
+ {
+   "ID": "MU458075",
+   "master_code": "MU458075"
+ },
+ {
+   "ID": "MU490075",
+   "master_code": "MU490075"
+ },
+ {
+   "ID": "MU465075",
+   "master_code": "MU465075"
+ },
+ {
+   "ID": "MU472075",
+   "master_code": "MU472075"
+ },
+ {
+   "ID": "MU468075",
+   "master_code": "MU468075"
+ },
+ {
+   "ID": "MU446075",
+   "master_code": "MU446075"
+ },
+ {
+   "ID": "MU471075",
+   "master_code": "MU471075"
+ },
+ {
+   "ID": "M6587015",
+   "master_code": "M6587015"
+ },
+ {
+   "ID": "M6588615",
+   "master_code": "M6588615"
+ },
+ {
+   "ID": "M6585437",
+   "master_code": "M6585437"
+ },
+ {
+   "ID": "M6589837",
+   "master_code": "M6589837"
+ },
+ {
+   "ID": "M6591637",
+   "master_code": "M6591637"
+ },
+ {
+   "ID": "M6582837",
+   "master_code": "M6582837"
+ },
+ {
+   "ID": "M6588737",
+   "master_code": "M6588737"
+ },
+ {
+   "ID": "M6582237",
+   "master_code": "M6582237"
+ },
+ {
+   "ID": "M11761",
+   "master_code": "M11761"
+ },
+ {
+   "ID": "M11764",
+   "master_code": "M11764"
+ },
+ {
+   "ID": "M11762",
+   "master_code": "M11762"
+ },
+ {
+   "ID": "M11763",
+   "master_code": "M11763"
+ },
+ {
+   "ID": "M6585475",
+   "master_code": "M6585475"
+ },
+ {
+   "ID": "M6589875",
+   "master_code": "M6589875"
+ },
+ {
+   "ID": "M6591375",
+   "master_code": "M6591375"
+ },
+ {
+   "ID": "M6595875",
+   "master_code": "M6595875"
+ },
+ {
+   "ID": "M6591675",
+   "master_code": "M6591675"
+ },
+ {
+   "ID": "M6582875",
+   "master_code": "M6582875"
+ },
+ {
+   "ID": "M6583075",
+   "master_code": "M6583075"
+ },
+ {
+   "ID": "M6588775",
+   "master_code": "M6588775"
+ },
+ {
+   "ID": "M6582275",
+   "master_code": "M6582275"
+ },
+ {
+   "ID": "M6583975",
+   "master_code": "M6583975"
+ },
+ {
+   "ID": "M6584075",
+   "master_code": "M6584075"
+ },
+ {
+   "ID": "M11911",
+   "master_code": "M11911"
+ },
+ {
+   "ID": "M6080415",
+   "master_code": "M6080415"
+ },
+ {
+   "ID": "M6080015",
+   "master_code": "M6080015"
+ },
+ {
+   "ID": "M6081715",
+   "master_code": "M6081715"
+ },
+ {
+   "ID": "M608043",
+   "master_code": "M608043"
+ },
+ {
+   "ID": "M608003",
+   "master_code": "M608003"
+ },
+ {
+   "ID": "M6080475",
+   "master_code": "M6080475"
+ },
+ {
+   "ID": "M6080675",
+   "master_code": "M6080675"
+ },
+ {
+   "ID": "M6080075",
+   "master_code": "M6080075"
+ },
+ {
+   "ID": "M6080175",
+   "master_code": "M6080175"
+ },
+ {
+   "ID": "M6080375",
+   "master_code": "M6080375"
+ },
+ {
+   "ID": "M6080275",
+   "master_code": "M6080275"
+ },
+ {
+   "ID": "M6081775",
+   "master_code": "M6081775"
+ },
+ {
+   "ID": "M6081875",
+   "master_code": "M6081875"
+ },
+ {
+   "ID": "MS868015",
+   "master_code": "MS868015"
+ },
+ {
+   "ID": "M11982",
+   "master_code": "M11982"
+ },
+ {
+   "ID": "M4752075",
+   "master_code": "M4752075"
+ },
+ {
+   "ID": "M4740075",
+   "master_code": "M4740075"
+ },
+ {
+   "ID": "M4758075",
+   "master_code": "M4758075"
+ },
+ {
+   "ID": "M4753075",
+   "master_code": "M4753075"
+ },
+ {
+   "ID": "M11814",
+   "master_code": "M11814"
+ },
+ {
+   "ID": "M11795",
+   "master_code": "M11795"
+ },
+ {
+   "ID": "M1152015",
+   "master_code": "M1152015"
+ },
+ {
+   "ID": "M1140015",
+   "master_code": "M1140015"
+ },
+ {
+   "ID": "M1158015",
+   "master_code": "M1158015"
+ },
+ {
+   "ID": "M1174015",
+   "master_code": "M1174015"
+ },
+ {
+   "ID": "M1120115",
+   "master_code": "M1120115"
+ },
+ {
+   "ID": "M1152036",
+   "master_code": "M1152036"
+ },
+ {
+   "ID": "M1140036",
+   "master_code": "M1140036"
+ },
+ {
+   "ID": "M1158036",
+   "master_code": "M1158036"
+ },
+ {
+   "ID": "M117403",
+   "master_code": "M117403"
+ },
+ {
+   "ID": "M1146036",
+   "master_code": "M1146036"
+ },
+ {
+   "ID": "M1149036",
+   "master_code": "M1149036"
+ },
+ {
+   "ID": "M1152075",
+   "master_code": "M1152075"
+ },
+ {
+   "ID": "M1140075",
+   "master_code": "M1140075"
+ },
+ {
+   "ID": "M1158075",
+   "master_code": "M1158075"
+ },
+ {
+   "ID": "M1174075",
+   "master_code": "M1174075"
+ },
+ {
+   "ID": "M1146075",
+   "master_code": "M1146075"
+ },
+ {
+   "ID": "M1121775",
+   "master_code": "M1121775"
+ },
+ {
+   "ID": "M1143075",
+   "master_code": "M1143075"
+ },
+ {
+   "ID": "M1138075",
+   "master_code": "M1138075"
+ },
+ {
+   "ID": "M1120175",
+   "master_code": "M1120175"
+ },
+ {
+   "ID": "M1149075",
+   "master_code": "M1149075"
+ },
+ {
+   "ID": "M11906",
+   "master_code": "M11906"
+ },
+ {
+   "ID": "M11907",
+   "master_code": "M11907"
+ },
+ {
+   "ID": "M11908",
+   "master_code": "M11908"
+ },
+ {
+   "ID": "M11909",
+   "master_code": "M11909"
+ },
+ {
+   "ID": "M4852015",
+   "master_code": "M4852015"
+ },
+ {
+   "ID": "M4840015",
+   "master_code": "M4840015"
+ },
+ {
+   "ID": "M4858015",
+   "master_code": "M4858015"
+ },
+ {
+   "ID": "M11786",
+   "master_code": "M11786"
+ },
+ {
+   "ID": "M11787",
+   "master_code": "M11787"
+ },
+ {
+   "ID": "M11784",
+   "master_code": "M11784"
+ },
+ {
+   "ID": "M11785",
+   "master_code": "M11785"
+ },
+ {
+   "ID": "M4852075",
+   "master_code": "M4852075"
+ },
+ {
+   "ID": "M4840075",
+   "master_code": "M4840075"
+ },
+ {
+   "ID": "M4858075",
+   "master_code": "M4858075"
+ },
+ {
+   "ID": "MC952075",
+   "master_code": "MC952075"
+ },
+ {
+   "ID": "MC940075",
+   "master_code": "MC940075"
+ },
+ {
+   "ID": "MC958075",
+   "master_code": "MC958075"
+ },
+ {
+   "ID": "MC983075",
+   "master_code": "MC983075"
+ },
+ {
+   "ID": "MC959075",
+   "master_code": "MC959075"
+ },
+ {
+   "ID": "M2757075",
+   "master_code": "M2757075"
+ },
+ {
+   "ID": "MU757075",
+   "master_code": "MU757075"
+ },
+ {
+   "ID": "ML450075",
+   "master_code": "ML450075"
+ },
+ {
+   "ID": "MR452036",
+   "master_code": "MR452036"
+ },
+ {
+   "ID": "MR441036",
+   "master_code": "MR441036"
+ },
+ {
+   "ID": "MR447036",
+   "master_code": "MR447036"
+ },
+ {
+   "ID": "MR460036",
+   "master_code": "MR460036"
+ },
+ {
+   "ID": "M11899",
+   "master_code": "M11899"
+ },
+ {
+   "ID": "MR459036",
+   "master_code": "MR459036"
+ },
+ {
+   "ID": "M11900",
+   "master_code": "M11900"
+ },
+ {
+   "ID": "MN452075",
+   "master_code": "MN452075"
+ },
+ {
+   "ID": "MN440075",
+   "master_code": "MN440075"
+ },
+ {
+   "ID": "MN456075",
+   "master_code": "MN456075"
+ },
+ {
+   "ID": "M5852075",
+   "master_code": "M5852075"
+ },
+ {
+   "ID": "M5840075",
+   "master_code": "M5840075"
+ },
+ {
+   "ID": "M5858075",
+   "master_code": "M5858075"
+ },
+ {
+   "ID": "M5882075",
+   "master_code": "M5882075"
+ },
+ {
+   "ID": "M5809375",
+   "master_code": "M5809375"
+ },
+ {
+   "ID": "M5860075",
+   "master_code": "M5860075"
+ },
+ {
+   "ID": "MU149075",
+   "master_code": "MU149075"
+ },
+ {
+   "ID": "MG652075",
+   "master_code": "MG652075"
+ },
+ {
+   "ID": "MG643075",
+   "master_code": "MG643075"
+ },
+ {
+   "ID": "MJ443075",
+   "master_code": "MJ443075"
+ },
+ {
+   "ID": "MJ453075",
+   "master_code": "MJ453075"
+ },
+ {
+   "ID": "MK840075",
+   "master_code": "MK840075"
+ },
+ {
+   "ID": "MJ438075",
+   "master_code": "MJ438075"
+ },
+ {
+   "ID": "MJ458075",
+   "master_code": "MJ458075"
+ },
+ {
+   "ID": "MJ455075",
+   "master_code": "MJ455075"
+ },
+ {
+   "ID": "MU273075",
+   "master_code": "MU273075"
+ },
+ {
+   "ID": "MU250075",
+   "master_code": "MU250075"
+ },
+ {
+   "ID": "MU243075",
+   "master_code": "MU243075"
+ },
+ {
+   "ID": "M11824",
+   "master_code": "M11824"
+ },
+ {
+   "ID": "M11826",
+   "master_code": "M11826"
+ },
+ {
+   "ID": "M11827",
+   "master_code": "M11827"
+ },
+ {
+   "ID": "M11829",
+   "master_code": "M11829"
+ },
+ {
+   "ID": "M11825",
+   "master_code": "M11825"
+ },
+ {
+   "ID": "M11828",
+   "master_code": "M11828"
+ },
+ {
+   "ID": "MU840075",
+   "master_code": "MU840075"
+ },
+ {
+   "ID": "MQ352075",
+   "master_code": "MQ352075"
+ },
+ {
+   "ID": "MQ353075",
+   "master_code": "MQ353075"
+ },
+ {
+   "ID": "MQ340075",
+   "master_code": "MQ340075"
+ },
+ {
+   "ID": "MQ343075",
+   "master_code": "MQ343075"
+ },
+ {
+   "ID": "MQ386075",
+   "master_code": "MQ386075"
+ },
+ {
+   "ID": "MR852075",
+   "master_code": "MR852075"
+ },
+ {
+   "ID": "MR854075",
+   "master_code": "MR854075"
+ },
+ {
+   "ID": "M11916",
+   "master_code": "M11916"
+ },
+ {
+   "ID": "MU952075",
+   "master_code": "MU952075"
+ },
+ {
+   "ID": "MU940075",
+   "master_code": "MU940075"
+ },
+ {
+   "ID": "MU942075",
+   "master_code": "MU942075"
+ },
+ {
+   "ID": "MU956075",
+   "master_code": "MU956075"
+ },
+ {
+   "ID": "M12104",
+   "master_code": "M12104"
+ },
+ {
+   "ID": "M12105",
+   "master_code": "M12105"
+ },
+ {
+   "ID": "MG752075",
+   "master_code": "MG752075"
+ },
+ {
+   "ID": "MG740075",
+   "master_code": "MG740075"
+ },
+ {
+   "ID": "MG758075",
+   "master_code": "MG758075"
+ },
+ {
+   "ID": "MG709375",
+   "master_code": "MG709375"
+ },
+ {
+   "ID": "ML753015",
+   "master_code": "ML753015"
+ },
+ {
+   "ID": "ML740015",
+   "master_code": "ML740015"
+ },
+ {
+   "ID": "ML777015",
+   "master_code": "ML777015"
+ },
+ {
+   "ID": "ML748015",
+   "master_code": "ML748015"
+ },
+ {
+   "ID": "ML754075",
+   "master_code": "ML754075"
+ },
+ {
+   "ID": "ML778075",
+   "master_code": "ML778075"
+ },
+ {
+   "ID": "ML769075",
+   "master_code": "ML769075"
+ },
+ {
+   "ID": "ML752075",
+   "master_code": "ML752075"
+ },
+ {
+   "ID": "ML742075",
+   "master_code": "ML742075"
+ },
+ {
+   "ID": "ML776075",
+   "master_code": "ML776075"
+ },
+ {
+   "ID": "ML773075",
+   "master_code": "ML773075"
+ },
+ {
+   "ID": "ML767075",
+   "master_code": "ML767075"
+ },
+ {
+   "ID": "ML774075",
+   "master_code": "ML774075"
+ },
+ {
+   "ID": "ML753075",
+   "master_code": "ML753075"
+ },
+ {
+   "ID": "ML740075",
+   "master_code": "ML740075"
+ },
+ {
+   "ID": "ML777075",
+   "master_code": "ML777075"
+ },
+ {
+   "ID": "ML758075",
+   "master_code": "ML758075"
+ },
+ {
+   "ID": "ML772075",
+   "master_code": "ML772075"
+ },
+ {
+   "ID": "ML768075",
+   "master_code": "ML768075"
+ },
+ {
+   "ID": "ML745075",
+   "master_code": "ML745075"
+ },
+ {
+   "ID": "ML783075",
+   "master_code": "ML783075"
+ },
+ {
+   "ID": "ML782075",
+   "master_code": "ML782075"
+ },
+ {
+   "ID": "ML752076",
+   "master_code": "ML752076"
+ },
+ {
+   "ID": "ML779076",
+   "master_code": "ML779076"
+ },
+ {
+   "ID": "M11897",
+   "master_code": "M11897"
+ },
+ {
+   "ID": "M11898",
+   "master_code": "M11898"
+ },
+ {
+   "ID": "M357601",
+   "master_code": "M357601"
+ },
+ {
+   "ID": "M357701",
+   "master_code": "M357701"
+ },
+ {
+   "ID": "M3576015",
+   "master_code": "M3576015"
+ },
+ {
+   "ID": "M3577015",
+   "master_code": "M3577015"
+ },
+ {
+   "ID": "M557603",
+   "master_code": "M557603"
+ },
+ {
+   "ID": "M557703",
+   "master_code": "M557703"
+ },
+ {
+   "ID": "M3576037",
+   "master_code": "M3576037"
+ },
+ {
+   "ID": "M3577037",
+   "master_code": "M3577037"
+ },
+ {
+   "ID": "M5576075",
+   "master_code": "M5576075"
+ },
+ {
+   "ID": "M5577075",
+   "master_code": "M5577075"
+ },
+ {
+   "ID": "M5076075",
+   "master_code": "M5076075"
+ },
+ {
+   "ID": "M5077075",
+   "master_code": "M5077075"
+ },
+ {
+   "ID": "M3576075",
+   "master_code": "M3576075"
+ },
+ {
+   "ID": "M3577075",
+   "master_code": "M3577075"
+ },
+ {
+   "ID": "MB652075",
+   "master_code": "MB652075"
+ },
+ {
+   "ID": "MB660075",
+   "master_code": "MB660075"
+ },
+ {
+   "ID": "MB658175",
+   "master_code": "MB658175"
+ },
+ {
+   "ID": "MB646075",
+   "master_code": "MB646075"
+ },
+ {
+   "ID": "MB649075",
+   "master_code": "MB649075"
+ },
+ {
+   "ID": "MU352075",
+   "master_code": "MU352075"
+ },
+ {
+   "ID": "MU360075",
+   "master_code": "MU360075"
+ },
+ {
+   "ID": "MU345075",
+   "master_code": "MU345075"
+ },
+ {
+   "ID": "M12091",
+   "master_code": "M12091"
+ },
+ {
+   "ID": "MQ960075",
+   "master_code": "MQ960075"
+ },
+ {
+   "ID": "MQ950075",
+   "master_code": "MQ950075"
+ },
+ {
+   "ID": "MT953075",
+   "master_code": "MT953075"
+ },
+ {
+   "ID": "MT940075",
+   "master_code": "MT940075"
+ },
+ {
+   "ID": "M11811",
+   "master_code": "M11811"
+ },
+ {
+   "ID": "M11810",
+   "master_code": "M11810"
+ },
+ {
+   "ID": "M11812",
+   "master_code": "M11812"
+ },
+ {
+   "ID": "M1852075",
+   "master_code": "M1852075"
+ },
+ {
+   "ID": "M1840075",
+   "master_code": "M1840075"
+ },
+ {
+   "ID": "M1882075",
+   "master_code": "M1882075"
+ },
+ {
+   "ID": "M1872075",
+   "master_code": "M1872075"
+ },
+ {
+   "ID": "M1846075",
+   "master_code": "M1846075"
+ }
+];
+
+        var ele = document.getElementById('mastercode');
+        for (var i = 0; i < masters.length; i++) {
+            // POPULATE SELECT ELEMENT WITH JSON.
+            ele.innerHTML = ele.innerHTML +
+                '<option value="' + masters[i]['ID'] + '">' + masters[i]['master_code'] + '</option>';
+        }
+
+    }
+</script>
+
+</html>
